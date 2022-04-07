@@ -22,10 +22,87 @@ void draw() {
     }
 }
 
-// Main
-int main() {
-    // Function Call
-    draw();
+// Setups the game and generate fruit
+void setup() {
+    gameover = 0;
+    x = height/2;
+    y = width/2;
+    label1:
+        fruitx = rand()%20;
+        if(fruitx == 0) {
+            goto label2;
+        }
+    score=0;
+}
 
-    return 0;
+// Reads the input from the keyboard W,A,S,D,X
+void input() {
+    if(kbhit()) {
+        switch (getch())
+        {
+        case 'a':
+            flag = 1;
+            break;
+        case 's':
+            flag = 2;
+            break;
+        case 'd':
+            flag = 3;
+            break;
+        case 'w':
+            flag = 4;
+            break;
+        case 'x':
+            gameover = 1;
+            break;
+        }
+    }
+}
+
+// Function for the game logics
+void logic() {
+    sleep(0.01);
+    switch (flag)
+    {
+    case 1:
+        y--;
+        break;
+    case 2:
+        x++;
+        break;
+    case 3:
+        y++;
+        break;
+    case 4:
+        x--;
+        break;
+    default:
+        break;
+    }
+
+    if (x < 0 || x > height || y < 0 || y > width) {
+        gameover = 1;
+    }
+    if (x == fruitx && y == fruity) {
+        label3:
+            fruitx = rand()%20;
+        if (fruitx == 0)
+            goto label3;
+        label4:
+            fruity = rand()%20;
+        if (fruity == 0)
+            goto label4;
+            score += 10;
+    }
+}
+
+// Main
+void main() {
+    int m, n;
+    setup();
+    while(!gameover) {
+        draw();
+        input();
+        logic();
+    }
 }
