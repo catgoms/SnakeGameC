@@ -8,30 +8,45 @@ int x, y, fruitx, fruity, flag;
 
 // Function to draw a boundary
 void draw() {
-    // system("cls");
+    system("cls");
     for (i = 0; i < height; i++) {
         for (j = 0; j < width; j++) {
             if (i == 0 || i == width - 1 || j == 0 || j == height - 1) {
                 printf("#");
             }
             else {
-                printf(" ");
+                if (i == x && j == y)
+                    printf("0");
+                else if (i == fruitx && j == fruity)
+                    printf("*");
+                else
+                    printf(" ");
             }
         }
         printf("\n");
     }
+
+    // Print the score after the game ends
+    printf("score = %d", score);
+    printf("\n");
+    printf("press X to quit the game");
 }
 
 // Setups the game and generate fruit
 void setup() {
     gameover = 0;
+
+    // Stores height and width
     x = height/2;
     y = width/2;
     label1:
         fruitx = rand()%20;
-        if(fruitx == 0) {
+        if(fruitx == 0)
+            goto label1;
+    label2:
+        fruity = rand()%20;
+        if (fruity == 0)
             goto label2;
-        }
     score=0;
 }
 
@@ -61,7 +76,7 @@ void input() {
 
 // Function for the game logics
 void logic() {
-    sleep(0.01);
+    sleep(0.5);
     switch (flag)
     {
     case 1:
@@ -80,18 +95,22 @@ void logic() {
         break;
     }
 
+    // If the game is over
     if (x < 0 || x > height || y < 0 || y > width) {
         gameover = 1;
     }
+
+    // If the snake reaches the fruit then update the score
     if (x == fruitx && y == fruity) {
         label3:
             fruitx = rand()%20;
-        if (fruitx == 0)
-            goto label3;
+            if (fruitx == 0)
+                goto label3;
+        // After eating the above fruit generate new fruit
         label4:
             fruity = rand()%20;
-        if (fruity == 0)
-            goto label4;
+            if (fruity == 0)
+                goto label4;
             score += 10;
     }
 }
@@ -99,7 +118,11 @@ void logic() {
 // Main
 void main() {
     int m, n;
+
+    // Setup boundary
     setup();
+
+    // Until the game is over
     while(!gameover) {
         draw();
         input();
